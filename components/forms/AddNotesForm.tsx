@@ -45,7 +45,7 @@ export function AddNotesForm() {
   }
 
   return (
-    <div className="border p-8 rounded-md w-1/4 shadow-sm">
+    <div className="border p-8 rounded-md w-full shadow-sm">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

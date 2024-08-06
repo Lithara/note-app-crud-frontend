@@ -3,7 +3,7 @@ import React from "react";
 
 const ViewNoteCard = () => {
   return (
-    <div className="border p-8 w-1/4 flex justify-between">
+    <div className="border p-8 w-full flex justify-between">
       <div className=" flex flex-col gap-4">
         <h1 className="text-xl font-semibold">Note Title</h1>
         <p className="text-gray-500">Note Description</p>

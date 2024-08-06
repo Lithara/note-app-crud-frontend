@@ -1,9 +1,6 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 import { Textarea } from "../ui/textarea";
 
 const FormSchema = z.object({
@@ -22,9 +18,7 @@ const FormSchema = z.object({
   description: z.string().min(1).max(1500),
 });
 
-const handleSubmit = () => {};
-
-export function AddNotesForm() {
+function AddNotesForm({ addNote }: any) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -33,22 +27,19 @@ export function AddNotesForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+  const handleSubmit = (data: z.infer<typeof FormSchema>) => {
+    addNote({
+      title: data.title,
+      description: data.description,
     });
-  }
+    form.reset();
+  };
 
   return (
     <div className="border p-8 rounded-md w-full shadow-sm">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleSubmit)}
           className="w-full space-y-6"
         >
           <FormField
@@ -77,7 +68,7 @@ export function AddNotesForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" onClick={handleSubmit}>
+          <Button type="submit" className="w-full">
             + Add Note
           </Button>
         </form>
@@ -85,3 +76,5 @@ export function AddNotesForm() {
     </div>
   );
 }
+
+export default AddNotesForm;

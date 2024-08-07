@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
+import { useEffect } from "react";
 
 const FormSchema = z.object({
   title: z.string().min(1).max(255),
   description: z.string().min(1).max(1500),
 });
 
-function AddNotesForm({ addNote }: any) {
+function AddNotesForm({ addNote, updateNote, selectedNote }:any) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -27,11 +28,28 @@ function AddNotesForm({ addNote }: any) {
     },
   });
 
+  useEffect(() => {
+    if (selectedNote) {
+      form.reset({
+        title: selectedNote.title,
+        description: selectedNote.description,
+      });
+    }
+  }, [selectedNote, form]);
+
   const handleSubmit = (data: z.infer<typeof FormSchema>) => {
-    addNote({
-      title: data.title,
-      description: data.description,
-    });
+    if (selectedNote) {
+      updateNote({
+        ...selectedNote,
+        title: data.title,
+        description: data.description,
+      });
+    } else {
+      addNote({
+        title: data.title,
+        description: data.description,
+      });
+    }
     form.reset();
   };
 
@@ -69,7 +87,7 @@ function AddNotesForm({ addNote }: any) {
             )}
           />
           <Button type="submit" className="w-full">
-            + Add Note
+            {selectedNote ? "Update Note" : "+ Add Note"}
           </Button>
         </form>
       </Form>

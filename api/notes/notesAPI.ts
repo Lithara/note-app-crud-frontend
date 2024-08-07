@@ -1,4 +1,3 @@
-// services/noteService.js
 import axios from "axios";
 import {
   ADD_NOTE_URL,
@@ -6,8 +5,6 @@ import {
   GET_ALL_NOTES_URL,
   UPDATE_NOTE_URL,
 } from "../_url/notes/url";
-
-const API_URL = "http://localhost:5000/api/notes"; // Your backend URL
 
 export const getNotes = async () => {
   try {

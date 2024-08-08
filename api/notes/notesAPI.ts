@@ -1,12 +1,15 @@
 import axios from "axios";
 import {
   ADD_NOTE_URL,
+  BACKEND_BASE_URL,
   DELETE_NOTE_URL,
   GET_ALL_NOTES_URL,
   UPDATE_NOTE_URL,
 } from "../_url/notes/url";
 
-export const getNotes = async () => {
+axios.defaults.baseURL = BACKEND_BASE_URL;
+
+export const getAllNotesAPI = async () => {
   try {
     const response = await axios.get(GET_ALL_NOTES_URL);
     return response.data;
@@ -16,7 +19,7 @@ export const getNotes = async () => {
   }
 };
 
-export const getNote = async (id: any) => {
+export const getNoteAPI = async (id: any) => {
   try {
     const response = await axios.get(`${GET_ALL_NOTES_URL}/${id}`);
     return response.data;
@@ -26,7 +29,7 @@ export const getNote = async (id: any) => {
   }
 };
 
-export const createNote = async (noteData: any) => {
+export const createNoteAPI = async (noteData: any) => {
   try {
     const response = await axios.post(ADD_NOTE_URL, noteData);
     return response.data;
@@ -36,7 +39,7 @@ export const createNote = async (noteData: any) => {
   }
 };
 
-export const updateNote = async (id: any, noteData: any) => {
+export const updateNoteAPI = async (id: any, noteData: any) => {
   try {
     const response = await axios.put(`${UPDATE_NOTE_URL}/${id}`, noteData);
     return response.data;
@@ -46,7 +49,7 @@ export const updateNote = async (id: any, noteData: any) => {
   }
 };
 
-export const deleteNote = async (id: any) => {
+export const deleteNoteAPI = async (id: any) => {
   try {
     const response = await axios.delete(`${DELETE_NOTE_URL}/${id}`);
     return response.data;

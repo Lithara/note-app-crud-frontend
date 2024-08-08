@@ -1,3 +1,5 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,14 +14,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createNoteAPI, updateNoteAPI } from "@/api/notes/notesAPI";
 
 const FormSchema = z.object({
   title: z.string().min(1).max(255),
   description: z.string().min(1).max(1500),
 });
 
-function AddNotesForm({ addNote, updateNote, selectedNote }:any) {
+function AddNotesForm({ selectedNote, onNoteAdded, fetchNotes }: any) {
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -37,20 +41,21 @@ function AddNotesForm({ addNote, updateNote, selectedNote }:any) {
     }
   }, [selectedNote, form]);
 
-  const handleSubmit = (data: z.infer<typeof FormSchema>) => {
-    if (selectedNote) {
-      updateNote({
-        ...selectedNote,
-        title: data.title,
-        description: data.description,
-      });
-    } else {
-      addNote({
-        title: data.title,
-        description: data.description,
-      });
+  const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setLoading(true);
+    try {
+      if (selectedNote) {
+        await updateNoteAPI(selectedNote.id, data);
+      } else {
+        await createNoteAPI(data);
+      }
+      onNoteAdded();
+      fetchNotes();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
     }
-    form.reset();
   };
 
   return (
@@ -86,7 +91,7 @@ function AddNotesForm({ addNote, updateNote, selectedNote }:any) {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" loading={loading}>
             {selectedNote ? "Update Note" : "+ Add Note"}
           </Button>
         </form>

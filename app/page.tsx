@@ -1,43 +1,56 @@
 "use client";
 
+import { getAllNotesAPI } from "@/api/notes/notesAPI";
 import Container from "@/components/common/Container";
 import AddNotesForm from "@/components/forms/AddNotesForm";
 import ViewNoteCard from "@/components/ViewNoteCard";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
-  const [notes, setNotes] = useState<any[]>([]);
+  const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
-
-  const addNote = (note: any) => {
-    setNotes([...notes, { id: notes.length + 1, ...note }]);
-  };
-
-  const updateNote = (note: any) => {
-    setNotes(notes.map(n => n.id === note.id ? note : n));
-  };
 
   const handleNoteClick = (note: any) => {
     setSelectedNote(note);
   };
+
+  const fetchNotes = async () => {
+    try {
+      const fetchedNotes = await getAllNotesAPI();
+      const mappedNotes = fetchedNotes.map((note: any) => ({
+        id: note.id,
+        title: note.title,
+        description: note.description,
+      }));
+      setNotes(mappedNotes);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
 
   return (
     <Container>
       <div className="w-full">
         <div className="my-12 flex flex-col lg:flex-row gap-4">
           <div className="w-full md:w-1/4">
-            <AddNotesForm addNote={addNote} updateNote={updateNote} selectedNote={selectedNote} />
+            <AddNotesForm selectedNote={selectedNote} />
           </div>
           <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {notes.map((note:any) => (
-              <div key={note.id} className="w-full">
-                <ViewNoteCard
-                  title={note.title}
-                  description={note.description}
-                  onClickEdit={() => handleNoteClick(note)}
-                  onClickDelete={() => setNotes(notes.filter(n => n.id !== note.id))}
-                />
-              </div>
+            {notes.map((note: any) => (
+              <ViewNoteCard
+                key={note.id}
+                title={note.title}
+                description={note.description}
+                onClickEdit={() => handleNoteClick(note)}
+                onClickDelete={() =>
+                  setNotes(notes.filter((n: any) => n.id !== note.id))
+                }
+                id={note.id}
+              />
             ))}
           </div>
         </div>

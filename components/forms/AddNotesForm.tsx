@@ -41,7 +41,7 @@ function AddNotesForm({ selectedNote, onNoteAdded, fetchNotes }: any) {
     }
   }, [selectedNote, form]);
 
-  const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const handleAddNote = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
       if (selectedNote) {
@@ -62,7 +62,7 @@ function AddNotesForm({ selectedNote, onNoteAdded, fetchNotes }: any) {
     <div className="border p-8 rounded-md w-full shadow-sm">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(handleSubmit)}
+          onSubmit={form.handleSubmit(handleAddNote)}
           className="w-full space-y-6"
         >
           <FormField

@@ -14,21 +14,21 @@ export default function Home() {
     setSelectedNote(note);
   };
 
-  const fetchNotes = async () => {
-    try {
-      const fetchedNotes = await getAllNotesAPI();
-      const mappedNotes = fetchedNotes.map((note: any) => ({
-        id: note.id,
-        title: note.title,
-        description: note.description,
-      }));
-      setNotes(mappedNotes);
-    } catch (error) {
-      console.error("Error fetching notes:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const fetchedNotes = await getAllNotesAPI();
+        const mappedNotes = fetchedNotes.map((note: any) => ({
+          id: note.id,
+          title: note.title,
+          description: note.description,
+        }));
+        setNotes(mappedNotes);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+
     fetchNotes();
   }, []);
 

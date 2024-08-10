@@ -19,10 +19,11 @@ export default function Home() {
       try {
         const fetchedNotes = await getAllNotesAPI();
         const mappedNotes = fetchedNotes.map((note: any) => ({
-          id: note.id,
+          id: note._id,
           title: note.title,
           description: note.description,
         }));
+        console.log(mappedNotes);
         setNotes(mappedNotes);
       } catch (error) {
         console.error("Error fetching notes:", error);

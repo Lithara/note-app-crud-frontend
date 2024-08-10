@@ -29,12 +29,12 @@ const ViewNoteCard = ({
   onClickDelete,
 }: ViewNoteCardProps) => {
   const handleDelete = async () => {
-    // try {
-    //   await deleteNoteAPI(id);
-    //   onClickDelete();
-    // } catch (error) {
-    //   console.error(`Error deleting note with id ${id}:`, error);
-    // }
+    try {
+      await deleteNoteAPI(id);
+      onClickDelete();
+    } catch (error) {
+      console.error(`Error deleting note with id ${id}:`, error);
+    }
   };
 
   return (

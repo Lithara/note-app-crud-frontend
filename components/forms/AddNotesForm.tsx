@@ -44,17 +44,18 @@ function AddNotesForm({ selectedNote, onNoteAdded, fetchNotes }: any) {
   const handleAddNote = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
+      let note;
       if (selectedNote) {
-        await updateNoteAPI(selectedNote.id, data);
+        note = await updateNoteAPI(selectedNote.id, data);
       } else {
-        await createNoteAPI(data);
+        note = await createNoteAPI(data);
       }
-      onNoteAdded();
-      fetchNotes();
+      onNoteAdded(note);
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
       setLoading(false);
+      fetchNotes();
     }
   };
 
